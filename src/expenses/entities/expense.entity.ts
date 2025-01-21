@@ -11,7 +11,9 @@ export class Expense {
     @Column('text')
     name: string;
 
-    @Column('float')
+    @Column('float', {
+        default: 0
+    })
     amount: number;
 
     @ManyToOne(
