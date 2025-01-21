@@ -24,14 +24,14 @@ export class User {
     @OneToMany(
         () => Expense,
         (expense) => expense.user,
-        { cascade: true, eager: true }
+        { cascade: true }
     )
     expense: Expense
 
     @OneToMany(
         () => Category,
         (category) => category.user,
-        { cascade: true, eager: true }
+        { cascade: true }
     )
     category: Category
 

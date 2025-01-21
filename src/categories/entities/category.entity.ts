@@ -14,7 +14,7 @@ export class Category {
     @OneToMany(
         () => Expense,
         (expense) => expense.category,
-        { cascade: true, eager: true }
+        { cascade: true}
     )
     expense: Expense
 
