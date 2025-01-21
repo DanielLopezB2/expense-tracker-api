@@ -2,12 +2,14 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
 
     constructor(
-        private readonly userService: UsersService
+        private readonly userService: UsersService,
+        private readonly jwtService: JwtService
     ) {}
 
     async login(loginUserDto: LoginUserDto) {
@@ -16,8 +18,11 @@ export class AuthService {
 
         if (!bcrypt.compareSync(password, user.password)) throw new UnauthorizedException('Invalid credentials, verify email or password.');
 
-        const { password: _,...restUser } = user;
-        return restUser;
+        const payload = { sub: user.email, name: user.name };
+
+        const token = this.jwtService.sign(payload);
+
+        return { token };
     }
   
 }
