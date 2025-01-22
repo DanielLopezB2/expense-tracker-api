@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -52,11 +52,77 @@ export class ExpensesService {
     return expensesPlain;
   }
 
-  async update(id: string, updateExpenseDto: UpdateExpenseDto) {
-    return `This action updates a #${id} expense`;
+  async update(id: string, updateExpenseDto: UpdateExpenseDto, payload: JwtPayload) {
+
+    const userId = payload.id;
+
+    const existingExpense = await this.expenseRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+
+    if (!existingExpense) {
+      throw new NotFoundException(`Expense with id ${id} not found.`);
+    }
+
+    if (existingExpense.user.id !== userId) {
+      throw new ForbiddenException(`You are not authorized to update this expense.`);
+    }
+
+    const { category: categoryName, ...toUpdate } = updateExpenseDto;
+
+    if (categoryName) {
+
+      const category = await this.categoryRepository.createQueryBuilder('category')
+        .where('LOWER(category.name) = LOWER(:name)', { name: updateExpenseDto.category })
+        .getOne();
+
+      if (!category) {
+        throw new NotFoundException(`Category with name ${categoryName} not found.`);
+      }
+
+      (toUpdate as any).category = category;
+
+    }
+
+    const expense = await this.expenseRepository.preload({
+    id,
+    ...toUpdate,
+    });
+
+    if (!expense) throw new NotFoundException(`Expense with id ${id} not found after update.`);
+    await this.expenseRepository.save(expense);
+
+    const responsePlain = {
+      id: expense.id,
+      name: expense.name,
+      amount: expense.amount,
+      createdAt: expense.createdAt,
+      category: expense.category.name
+    };
+
+    return responsePlain;
+
   }
 
-  async remove(id: string) {
-    return `This action removes a #${id} expense`;
+  async remove(id: string, payload: JwtPayload) {
+
+    const userId = payload.id;
+
+    const existingExpense = await this.expenseRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+
+    if (!existingExpense) {
+      throw new NotFoundException(`Expense with id ${id} not found.`);
+    }
+
+    if (existingExpense.user.id !== userId) {
+      throw new ForbiddenException(`You are not authorized to delete this expense.`);
+    }
+
+    await this.expenseRepository.softDelete(id);
+    return { message: `Expense ${existingExpense?.name} deleted.` }
   }
 }

@@ -50,7 +50,7 @@ export class CategoriesService {
 
   async remove(id: string) {
     const category = await this.findOne(id);
-    if (category) await this.categoryRepository.delete(id);
+    if (category) await this.categoryRepository.softDelete(id);
     return { message: `Category ${category?.name} deleted.` }
   }
 

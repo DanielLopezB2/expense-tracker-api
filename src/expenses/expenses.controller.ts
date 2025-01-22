@@ -24,13 +24,13 @@ export class ExpensesController {
 
   @Patch(':id')
   @UseGuards(AuthGuard)
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateExpenseDto: UpdateExpenseDto) {
-    return this.expensesService.update(id, updateExpenseDto);
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateExpenseDto: UpdateExpenseDto, @GetUser() payload: JwtPayload) {
+    return this.expensesService.update(id, updateExpenseDto, payload);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.expensesService.remove(id);
+  remove(@Param('id', ParseUUIDPipe) id: string, @GetUser() payload: JwtPayload) {
+    return this.expensesService.remove(id, payload);
   }
 }
