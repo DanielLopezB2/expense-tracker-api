@@ -32,6 +32,8 @@ export class ExpensesService {
       category: categoryRelated
     });
 
+    await this.expenseRepository.save(expense);
+
     const { updatedAt, deletedAt, user, category, ...restExpense } = expense;
     
     return restExpense;
