@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { ExpensesModule } from './expenses/expenses.module';
 import { CategoriesModule } from './categories/categories.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     UsersModule,
     AuthModule,
     ExpensesModule,
-    CategoriesModule
+    CategoriesModule,
+    SeedModule
   ],
   controllers: [],
   providers: [],

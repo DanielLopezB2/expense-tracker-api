@@ -19,13 +19,6 @@ export class Category {
     )
     expense: Expense
 
-    @ManyToOne(
-        () => User,
-        (user) => user.category,
-        { eager: true }
-    )
-    user: User
-
     @CreateDateColumn()
     createdAt?: string;
 

@@ -29,13 +29,6 @@ export class User {
     )
     expense: Expense
 
-    @OneToMany(
-        () => Category,
-        (category) => category.user,
-        { cascade: true }
-    )
-    category: Category
-
     @CreateDateColumn()
     createdAt?: string;
 
