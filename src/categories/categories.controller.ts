@@ -3,6 +3,9 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { User } from 'src/users/entities/user.entity';
+import { JwtPayload } from 'src/auth/interfaces/jwt-payload.interface';
 
 @Controller('categories')
 export class CategoriesController {
@@ -16,8 +19,8 @@ export class CategoriesController {
 
   @Get()
   @UseGuards(AuthGuard)
-  findAll() {
-    return this.categoriesService.findAll();
+  findAll(@GetUser() user: JwtPayload) {
+    return this.categoriesService.findAll(user);
   }
 
   @Get(':id')

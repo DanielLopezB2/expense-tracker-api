@@ -4,6 +4,8 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { Repository } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { JwtPayload } from 'src/auth/interfaces/jwt-payload.interface';
 
 @Injectable()
 export class CategoriesService {
@@ -19,11 +21,19 @@ export class CategoriesService {
     const category = this.categoryRepository.create(createCategoryDto);
     await this.categoryRepository.save(category);
     const { updatedAt, deletedAt, ...restCategory } = category;
+    
     return restCategory;
   }
 
-  async findAll() {
-    return this.categoryRepository.find();
+  async findAll(user: JwtPayload) {
+    const categories = await this.categoryRepository.find({
+      where: { user: { id: user.id } }
+    });
+
+    return categories.map(({ deletedAt, user, ...rest }) => ({
+      ...rest
+    }));
+
   }
 
   findOne(id: string) {

@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { Category } from "src/categories/entities/category.entity";
 import { Expense } from "src/expenses/entities/expense.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
@@ -42,6 +43,7 @@ export class User {
     updatedAt?: string;
 
     @DeleteDateColumn()
+    @Exclude()
     deletedAt?: string;
 
 }

@@ -18,11 +18,15 @@ export class AuthService {
 
         if (!bcrypt.compareSync(password, user.password)) throw new UnauthorizedException('Invalid credentials, verify email or password.');
 
-        const payload = { sub: user.email, name: user.name };
+        const payload = { sub: user.name, email: user.email, id: user.id };
 
         const token = this.jwtService.sign(payload);
 
         return { token };
+    }
+
+    async logout() {
+
     }
   
 }
