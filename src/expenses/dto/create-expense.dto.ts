@@ -1,4 +1,5 @@
-import { IsNumber, IsPositive, IsString, MinLength } from "class-validator";
+import { Transform } from "class-transformer";
+import { IsIn, IsNumber, IsPositive, IsString, MinLength } from "class-validator";
 
 export class CreateExpenseDto {
 
@@ -11,6 +12,8 @@ export class CreateExpenseDto {
     amount: number;
     
     @IsString()
+    @Transform(({ value }) => value?.toLowerCase())
+    @IsIn(['groceries', 'leisure', 'utilities', 'health', 'electronics', 'clothing', 'others'])
     category: string;
 
 }

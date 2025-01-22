@@ -12,6 +12,6 @@ import { AuthModule } from 'src/auth/auth.module';
     TypeOrmModule.forFeature([Category]),
     AuthModule
   ],
-  exports: [CategoriesService]
+  exports: [CategoriesService, TypeOrmModule]
 })
 export class CategoriesModule {}
