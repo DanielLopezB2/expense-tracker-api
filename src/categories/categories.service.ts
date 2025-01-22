@@ -54,4 +54,8 @@ export class CategoriesService {
     return { message: `Category ${category?.name} deleted.` }
   }
 
+  async removeAll() {
+    await this.categoryRepository.delete({});
+  }
+
 }

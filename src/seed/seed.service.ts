@@ -35,9 +35,13 @@ export class SeedService {
   ];
 
   async seed() {
+
+    await this.categoriesService.removeAll();
+
     const categories = this.categoriesList;
-    categories.forEach(category => {
-      this.categoriesService.create(category)
+
+    categories.forEach(async category => {
+      await this.categoriesService.create(category)
     });
     return { message: 'Seed executed.' };
   }
