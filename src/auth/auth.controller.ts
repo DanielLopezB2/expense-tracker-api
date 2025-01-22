@@ -1,6 +1,7 @@
-import { Controller, Post, Body, Get, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, Get, HttpCode, HttpStatus, Headers } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { GetUser } from './decorators/get-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -15,8 +16,8 @@ export class AuthController {
   }
 
   @Get('logout')
-  logout() {
-    return "Este es el Logout";
+  logout(@Headers('Authorization') token: string) {
+    return this.authService.logout(token);
   }
 
   

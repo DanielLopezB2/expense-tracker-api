@@ -10,7 +10,9 @@ export class AuthService {
     constructor(
         private readonly userService: UsersService,
         private readonly jwtService: JwtService
-    ) {}
+    ) { }
+    
+    private blacklistedTokens: Set<string> = new Set();
 
     async login(loginUserDto: LoginUserDto) {
         const { password, email } = loginUserDto;
@@ -25,8 +27,14 @@ export class AuthService {
         return { token };
     }
 
-    async logout() {
+    async logout(token: string) {
+        const formattedToken = token.startsWith('Bearer ') ? token.slice(7) : token;
+        this.blacklistedTokens.add(formattedToken);
+        return { message: 'Logged out successfully' };
+    }
 
+    isTokenBlacklisted(token: string): boolean {
+        return this.blacklistedTokens.has(token);
     }
   
 }
