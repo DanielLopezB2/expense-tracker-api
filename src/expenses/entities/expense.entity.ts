@@ -32,13 +32,13 @@ export class Expense {
     category: Category
 
     @CreateDateColumn()
-    createdAt?: string;
+    createdAt?: Date;
 
     @UpdateDateColumn()
-    updatedAt?: string;
+    updatedAt?: Date;
 
     @DeleteDateColumn()
     @Exclude()
-    deletedAt?: string;
+    deletedAt?: Date;
 
 }

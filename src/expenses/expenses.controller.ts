@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe, Query } from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
@@ -18,8 +18,8 @@ export class ExpensesController {
 
   @Get()
   @UseGuards(AuthGuard)
-  findAll(@GetUser() payload: JwtPayload) {
-    return this.expensesService.findAll(payload);
+  findAll(@GetUser() payload: JwtPayload, @Query('filter') term: string) {
+    return this.expensesService.findAll(payload, term);
   }
 
   @Patch(':id')
