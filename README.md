@@ -4,6 +4,8 @@
 
 # Expense Tracker API - Daniel Lopez
 
+* Project idea by: https://roadmap.sh/projects/expense-tracker-api
+
 ## Tech Stack
 
 * PostgreSQL
